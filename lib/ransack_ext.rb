@@ -18,4 +18,6 @@ Ransack.configure do |config|
   config.add_predicate "lteq_datetime",
                        arel_predicate: "lt",
                        formatter: ->(v) { v + 1.day }
+
+Ransack::Adapters::ActiveRecord::Base.class_eval('remove_method :search')
 end
