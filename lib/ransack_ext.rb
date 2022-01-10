@@ -19,5 +19,18 @@ Ransack.configure do |config|
                        arel_predicate: "lt",
                        formatter: ->(v) { v + 1.day }
 
-Ransack::Adapters::ActiveRecord::Base.class_eval('remove_method :search')
+
+  Ransack::Adapters::ActiveRecord::Base.class_eval do
+    def self.extended(base)
+      # alias :search :ransack unless base.respond_to? :search
+      base.class_eval do
+        class_attribute :_ransackers
+        class_attribute :_ransack_aliases
+        self._ransackers ||= {}
+        self._ransack_aliases ||= {}
+      end
+    end
+  end
+  
 end
+
